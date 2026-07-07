@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ER Prioritization Framework · Executive Brief</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue:       #2563eb;
+            --blue-50:    #eff6ff;
+            --blue-100:   #dbeafe;
+            --blue-700:   #1d4ed8;
+            --blue-900:   #1e3a8a;
+            --purple:     #7c3aed;
+            --purple-50:  #f5f3ff;
+            --purple-100: #ede9fe;
+            --purple-700: #6d28d9;
+            --green:      #16a34a;
+            --green-50:   #f0fdf4;
+            --amber:      #d97706;
+            --amber-50:   #fffbeb;
+            --red:        #dc2626;
+            --slate-50:   #f8fafc;
+            --slate-100:  #f1f5f9;
+            --slate-200:  #e2e8f0;
+            --slate-300:  #cbd5e1;
+            --slate-400:  #94a3b8;
+            --slate-500:  #64748b;
+            --slate-600:  #475569;
+            --slate-700:  #334155;
+            --slate-800:  #1e293b;
+            --slate-900:  #0f172a;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--slate-50);
+            color: var(--slate-700);
+            line-height: 1.6;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, var(--slate-900) 0%, #1e3a8a 55%, #6d28d9 100%);
+            color: white;
+            padding: 100px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,0.04), transparent);
+            pointer-events: none;
+        }
+        .hero-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 18px;
+        }
+        .hero h1 {
+            font-size: clamp(34px, 6vw, 68px);
+            font-weight: 900;
+            line-height: 1.08;
+            margin-bottom: 22px;
+            letter-spacing: -1.5px;
+        }
+        .hero h1 span {
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-sub {
+            font-size: clamp(16px, 2vw, 20px);
+            color: rgba(255,255,255,0.65);
+            max-width: 560px;
+            margin: 0 auto 44px;
+            font-weight: 400;
+        }
+        .hero-versions {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .version-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 26px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .version-badge.v1 {
+            background: rgba(37,99,235,0.25);
+            border: 1px solid rgba(96,165,250,0.4);
+            color: #93c5fd;
+        }
+        .version-badge.v2 {
+            background: rgba(124,58,237,0.25);
+            border: 1px solid rgba(167,139,250,0.4);
+            color: #c4b5fd;
+        }
+        .badge-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+        .v1 .badge-dot { background: #60a5fa; box-shadow: 0 0 8px #60a5fa; animation: blink 2s infinite; }
+        .v2 .badge-dot { background: #a78bfa; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+
+        /* ── LAYOUT ── */
+        .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 24px; }
+        section.alt { background: white; }
+
+        .eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .eyebrow.slate  { color: var(--slate-400); }
+        .eyebrow.blue   { color: var(--blue); }
+        .eyebrow.purple { color: var(--purple); }
+
+        .sec-title {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 800;
+            color: var(--slate-900);
+            line-height: 1.12;
+            letter-spacing: -0.5px;
+            margin-bottom: 14px;
+        }
+        .sec-desc {
+            font-size: 17px;
+            color: var(--slate-500);
+            max-width: 640px;
+            margin-bottom: 48px;
+        }
+
+        /* ── PRINCIPLE CARDS ── */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+        }
+        .principle-card {
+            background: var(--blue-50);
+            border: 1px solid var(--blue-100);
+            border-radius: 18px;
+            padding: 28px;
+        }
+        .p-icon {
+            width: 46px; height: 46px;
+            background: var(--blue);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        .principle-card h3 { font-size: 17px; font-weight: 700; color: var(--slate-900); margin-bottom: 8px; }
+        .principle-card p  { font-size: 14px; color: var(--slate-600); line-height: 1.6; }
+
+        /* ── VERSION LABELS ── */
+        .ver-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .v-pill {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .v-pill.blue    { background: var(--blue-100);  color: var(--blue-700); }
+        .v-pill.purple  { background: var(--purple-100); color: var(--purple-700); }
+        .v-pill.green   { background: #dcfce7; color: #15803d; }
+        .v-pill.amber   { background: #fef3c7; color: #b45309; }
+
+        /* ── FORMULA BLOCK ── */
+        .formula-block {
+            background: var(--slate-900);
+            border-radius: 20px;
+            padding: 32px 36px;
+            margin: 28px 0;
+        }
+        .formula-block-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--slate-500);
+            margin-bottom: 18px;
+        }
+        .formula-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .f-result {
+            background: linear-gradient(90deg, var(--blue), var(--purple));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+        .f-eq  { color: var(--slate-400); font-size: 22px; font-weight: 300; }
+        .f-op  { color: var(--slate-500); font-size: 20px; }
+        .f-chip {
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        .f-blue   { background: rgba(37,99,235,.18);  color: #60a5fa; border: 1px solid rgba(37,99,235,.3); }
+        .f-green  { background: rgba(22,163,74,.18);  color: #4ade80; border: 1px solid rgba(22,163,74,.3); }
+        .f-amber  { background: rgba(217,119,6,.18);  color: #fbbf24; border: 1px solid rgba(217,119,6,.3); }
+        .f-purple { background: rgba(124,58,237,.18); color: #a78bfa; border: 1px solid rgba(124,58,237,.3); }
+        .f-pink   { background: rgba(236,72,153,.18); color: #f472b6; border: 1px solid rgba(236,72,153,.3); }
+        .f-red    { background: rgba(220,38,38,.18);  color: #f87171; border: 1px solid rgba(220,38,38,.3); }
+        .formula-note {
+            font-size: 13px;
+            color: var(--slate-500);
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,.06);
+            line-height: 1.6;
+        }
+
+        /* ── PARAMETER TABLE ── */
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 3px solid var(--slate-700);
+            margin: 32px 0;
+        }
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 14px;
+        }
+        .param-table th {
+            padding: 13px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--slate-500);
+            background: var(--slate-100);
+            border-bottom: 3px solid var(--slate-700);
+            border-right: 1px solid var(--slate-300);
+        }
+        .param-table th:last-child { border-right: none; }
+        .param-table td {
+            padding: 13px 20px;
+            border-bottom: 1px solid var(--slate-200);
+            border-right: 1px solid var(--slate-200);
+            color: var(--slate-700);
+            vertical-align: middle;
+        }
+        .param-table td:last-child { border-right: none; }
+        .param-table tr:last-child td { border-bottom: none; }
+        .param-table tbody tr:hover td { background: var(--slate-50); }
+        .param-table tr.section-start td { border-top: 3px solid var(--slate-700); }
+        .param-group {
+            font-weight: 700;
+            color: var(--slate-900);
+            font-size: 14px;
+        }
+        .param-sub { font-size: 11px; color: var(--slate-400); margin-top: 3px; font-weight: 400; }
+        .tier-row { display: flex; align-items: center; gap: 8px; }
+        .tier-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+        .pts  { font-weight: 700; color: var(--blue); }
+        .mult {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+        .mult-hi  { background: #dcfce7; color: #15803d; }
+        .mult-mid { background: #fef3c7; color: #b45309; }
+        .mult-lo  { background: var(--slate-100); color: var(--slate-500); }
+
+        /* ── EXAMPLE CARDS ── */
+        .ex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 22px;
+        }
+        .ex-card {
+            border-radius: 20px;
+            padding: 28px;
+            border: 1px solid var(--slate-200);
+            background: white;
+            position: relative;
+        }
+        .ex-tag {
+            position: absolute;
+            top: 18px; right: 18px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: white;
+            padding: 3px 11px;
+            border-radius: 20px;
+        }
+        .ex-id    { font-size: 12px; font-weight: 600; color: var(--slate-400); margin-bottom: 5px; }
+        .ex-title { font-size: 18px; font-weight: 700; color: var(--slate-900); margin-bottom: 22px; }
+        .score-breakdown {
+            background: var(--slate-50);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 18px;
+        }
+        .score-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 7px 0;
+            font-size: 13px;
+            border-bottom: 1px solid var(--slate-200);
+        }
+        .score-line:last-child { border-bottom: none; }
+        .score-line .lbl { color: var(--slate-500); flex: 1; }
+        .score-line .val { font-weight: 600; color: var(--slate-900); white-space: nowrap; }
+        .score-line.sub  { padding-left: 14px; }
+        .score-line.sub .lbl { color: var(--slate-400); font-size: 12px; font-style: italic; }
+        .score-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-top: 4px;
+        }
+        .score-total .lbl { font-size: 14px; font-weight: 700; color: var(--slate-800); }
+        .score-total .val { font-size: 32px; font-weight: 900; }
+
+        /* ── EXPANDABLE SECTIONS ── */
+        .ex-details summary { list-style: none; }
+        .ex-details summary::-webkit-details-marker { display: none; }
+        .ex-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            cursor: pointer;
+            padding: 20px 24px;
+            border-radius: 16px;
+            border: 1px solid var(--slate-200);
+            background: white;
+            user-select: none;
+            transition: background .15s, border-color .15s;
+        }
+        .ex-summary:hover { background: var(--slate-50); border-color: var(--slate-300); }
+        .ex-summary-left { flex: 1; }
+        .ex-chevron {
+            font-size: 13px;
+            color: var(--slate-400);
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+        .ex-details[open] .ex-chevron { transform: rotate(90deg); }
+        .ex-details[open] .ex-summary { border-radius: 16px 16px 0 0; border-bottom: none; background: var(--slate-50); }
+
+        /* ── AI MODULES ── */
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+        .ai-card {
+            background: var(--purple-50);
+            border: 1px solid var(--purple-100);
+            border-radius: 18px;
+            padding: 28px;
+        }
+        .ai-icon {
+            width: 46px; height: 46px;
+            background: var(--purple);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            margin-bottom: 16px;
+        }
+        .ai-card h3 { font-size: 17px; font-weight: 700; color: var(--slate-900); margin-bottom: 10px; }
+        .ai-card p  { font-size: 13px; color: var(--slate-500); margin-bottom: 18px; line-height: 1.6; }
+        .ai-tier {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 9px 0;
+            border-bottom: 1px solid var(--purple-100);
+            font-size: 13px;
+        }
+        .ai-tier:last-child { border-bottom: none; }
+        .ai-tier .t-name { color: var(--slate-600); flex: 1; }
+
+        /* ── TIMELINE ── */
+        .timeline {
+            position: relative;
+            padding-left: 44px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 16px; top: 16px; bottom: 16px;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--blue), var(--purple));
+            border-radius: 2px;
+        }
+        .t-item {
+            position: relative;
+            padding-bottom: 48px;
+        }
+        .t-item:last-child { padding-bottom: 0; }
+        .t-dot {
+            position: absolute;
+            left: -35px; top: 2px;
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+        .t-dot.blue   { background: var(--blue);   box-shadow: 0 0 0 4px var(--blue-100); }
+        .t-dot.purple { background: var(--purple);  box-shadow: 0 0 0 4px var(--purple-100); }
+        .t-period { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--slate-400); margin-bottom: 6px; }
+        .t-item h3 { font-size: 22px; font-weight: 800; color: var(--slate-900); margin-bottom: 8px; }
+        .t-item p  { font-size: 15px; color: var(--slate-500); max-width: 520px; }
+        .t-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .t-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .t-tag.blue   { background: var(--blue-50);   color: var(--blue-700); }
+        .t-tag.purple { background: var(--purple-50);  color: var(--purple-700); }
+
+        /* ── CALLOUT ── */
+        .callout {
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+        .callout.blue   { background: var(--blue-50);   border: 1px solid var(--blue-100);   color: var(--slate-600); }
+        .callout.purple { background: var(--purple-50);  border: 1px solid var(--purple-100);  color: var(--slate-600); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--slate-900);
+            color: var(--slate-500);
+            text-align: center;
+            padding: 36px 24px;
+            font-size: 13px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            section { padding: 60px 20px; }
+            .ex-grid { grid-template-columns: 1fr; }
+            .formula-block { padding: 24px 20px; }
+            .f-chip { font-size: 12px; padding: 7px 12px; }
+        }
+    </style>
+</head>
+<body class="" style="">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero">
+    <p class="hero-eyebrow">Product Management · Internal Framework</p>
+    <h1>Enhancement Request<br><span>Prioritization Framework</span></h1>
+    <p class="hero-sub">Replacing subjective triage with a value-driven prioritization so PMs focus on what matters.</p>
+    <div class="hero-versions">
+        <div class="version-badge v1">
+            <span class="badge-dot"></span>
+            V1.0 · Pure Data-Driven · Active Now → Jan 2027
+        </div>
+        <div class="version-badge v2">
+            <span class="badge-dot"></span>
+            V2.0 · AI-Augmented · Jan 2027
+        </div>
+    </div>
+</header>
+
+<!-- ═══════════════ DESIGN PRINCIPLES ═══════════════ -->
+<section class="alt">
+    <div class="container">
+        <p class="eyebrow blue">🏗 Design Principles</p>
+        <h2 class="sec-title">Built for objectivity and scale</h2>
+        <p class="sec-desc">Three structural decisions make the model objective, consistent, and manipulation-resistant from day one.</p>
+        <div class="grid-3">
+            <div class="principle-card">
+                <div class="p-icon">📈</div>
+                <h3>Exponential ARR Baseline</h3>
+                <p>ARR tiers jump exponentially&nbsp;</p><div>(2 → 10 → 30 → 75 → 150 pts), not linearly.&nbsp;</div><div>This naturally separates scores and eliminates statistical clumping .</div><p></p>
+            </div>
+            <div class="principle-card">
+                <div class="p-icon">🌐</div>
+                <h3>Domain-Based Voting</h3>
+                <p>Only unique account votes count as external upvotes.&nbsp; Same account vote counts are isolated as low-weight "echo votes," neutralizing votes inflation.</p>
+            </div>
+            <div class="principle-card">
+                <div class="p-icon">✖️</div>
+                <h3>Multiplicative Multipliers</h3>
+                <p>Business factors compound multiplicatively.&nbsp;</p><div>A strategic, at-risk account near renewal stacks all four multipliers — surfacing true urgency automatically.</div><p></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ V1.0 ═══════════════ -->
+<section>
+    <div class="container">
+        <div class="ver-row">
+            <span class="v-pill blue">V1.0</span>
+            <span class="v-pill green">● Active Now</span>
+            <span style="font-size:14px; color:var(--slate-400)">Now → January 2027</span>
+        </div>
+        <h2 class="sec-title">V1.0 Pure Data-Driven Formula</h2>
+        <p class="sec-desc">Runs entirely on deterministic data from Salesforce and internal databases. Zero subjectivity. Fully automatable from day one.</p>
+
+        <!-- ER Score Formula -->
+        <div class="formula-block">
+            <p class="formula-block-label">ER Score Formula</p>
+            <div class="formula-row">
+                <span class="f-result">ER Score</span>
+                <span class="f-eq">=</span>
+                <span class="f-chip f-blue">Creator Account Score</span>
+                <span class="f-op">+</span>
+                <span class="f-chip f-green">Σ Other Customers Account Scores × 0.25</span>
+                <span class="f-op">+</span>
+                <span class="f-chip f-amber">Same customer Votes × 0.1</span>
+            </div>
+            <p class="formula-note">External upvotes from different company domains each contribute 25% of that supporter's account score — rewarding market breadth. Internal votes from the same company contribute a flat 0.1 pts each, capping the ballot stuffing impact regardless of volume.</p>
+        </div>
+
+        <!-- Account Score Formula -->
+        <div class="formula-block">
+            <p class="formula-block-label">Account Score Formula</p>
+            <div class="formula-row">
+                <span class="f-result">Account Score</span>
+                <span class="f-eq">=</span>
+                <span class="f-chip f-blue">ARR</span>
+                <span class="f-op">×</span>
+                <span class="f-chip f-green">Customer Health ×</span>
+                <span class="f-op">×</span>
+                <span class="f-chip f-amber">Is strategic? ×</span>
+                <span class="f-op">×</span>
+                <span class="f-chip f-purple">Is an SF Contact? ×</span>
+                <span class="f-op">×</span>
+                <span class="f-chip f-pink">Milestone soon? ×</span>
+            </div>
+            <p class="formula-note">All multipliers compound. A strategic, at-risk enterprise account near renewal stacks ×1.50 × ×1.35 × ×1.20 × ×1.15 = <strong style="color:#e2e8f0">×2.79</strong> on top of its ARR base — reflecting genuine business urgency.</p>
+        </div>
+
+        <!-- Parameter Table -->
+        <div class="table-wrap">
+            <table class="param-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Tier / Condition</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="section-start">
+                        <td rowspan="6">
+                            <div class="param-group">Base ARR</div>
+                            <div class="param-sub">Exponential steps<br>prevent clumping</div>
+                        </td>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#1e3a8a"></span> &gt; $1M ARR</span></td>
+                        <td><span class="pts">150 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#1d4ed8"></span> $500k – $1M ARR</span></td>
+                        <td><span class="pts">75 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#3b82f6"></span> $200k – $500k ARR</span></td>
+                        <td><span class="pts">30 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#60a5fa"></span> $50k – $200k ARR</span></td>
+                        <td><span class="pts">10 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#93c5fd"></span> &lt; $50k ARR</span></td>
+                        <td><span class="pts">2 pts</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="tier-row"><span class="tier-dot" style="background:#e2e8f0"></span> Unknown / None</span></td>
+                        <td><span class="pts">0 pts</span></td>
+                    </tr>
+                    <tr class="section-start">
+                        <td rowspan="2">
+                            <div class="param-group">Health ×</div>
+                            <div class="param-sub">At-risk accounts get<br>highest multiplier</div>
+                        </td>
+                        <td>🟡 Yellow — Active but at risk (high friction)</td>
+                        <td><span class="mult mult-hi">× 1.50</span></td>
+                    </tr>
+                    <tr>
+                        <td>🔴 Red — Critical risk &nbsp; | &nbsp; 🟢 Green — Stable</td>
+                        <td><span class="mult mult-lo">× 1.00</span></td>
+                    </tr>
+                    <tr class="section-start">
+                        <td rowspan="2"><div class="param-group">Strategic ×</div></td>
+                        <td>⭐ "Strategic" or "Growth" flag in Salesforce</td>
+                        <td><span class="mult mult-hi">× 1.35</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard account</td>
+                        <td><span class="mult mult-lo">× 1.00</span></td>
+                    </tr>
+                    <tr class="section-start">
+                        <td rowspan="2"><div class="param-group">Contact ×</div></td>
+                        <td>👤 Submitter is a Key Contact / Buyer in Salesforce</td>
+                        <td><span class="mult mult-mid">× 1.20</span></td>
+                    </tr>
+                    <tr>
+                        <td>Standard end-user</td>
+                        <td><span class="mult mult-lo">× 1.00</span></td>
+                    </tr>
+                    <tr class="section-start">
+                        <td rowspan="2"><div class="param-group">Milestone ×</div></td>
+                        <td>📅 Contract renewal or major milestone within 90 days</td>
+                        <td><span class="mult mult-mid">× 1.15</span></td>
+                    </tr>
+                    <tr>
+                        <td>No immediate milestone</td>
+                        <td><span class="mult mult-lo">× 1.00</span></td>
+                    </tr>
+                    <tr class="section-start">
+                        <td><div class="param-group">External Upvote</div></td>
+                        <td>🏢 Different company domain (market breadth)</td>
+                        <td style="color:var(--green); font-weight:600">+ 25% of supporter's score</td>
+                    </tr>
+                    <tr class="section-start">
+                        <td><div class="param-group">Internal Echo Vote</div></td>
+                        <td>👥 Same company, any additional vote</td>
+                        <td style="color:var(--amber); font-weight:600">+ 0.1 pts (flat cap)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- V1.0 Examples (collapsible) -->
+        <details class="ex-details" style="margin-top:52px">
+            <summary class="ex-summary">
+                <span class="ex-summary-left">
+                    <p class="eyebrow blue" style="margin:0">📊 V1.0 · Example scenarios</p>
+                    <h3 style="font-size:26px; font-weight:800; color:var(--slate-900); margin:6px 0 4px; line-height:1.2">Two ERs. Same internal vote count. Very different outcomes.</h3>
+                    <p style="color:var(--slate-500); font-size:15px; margin:0">The formula rewards business value — not popularity.</p>
+                </span>
+                <span class="ex-chevron">▶</span>
+            </summary>
+            <div class="ex-grid" style="margin-top:28px">
+                <div class="ex-card" style="border-color:#bbf7d0">
+                    <span class="ex-tag" style="background:var(--green)">✓ Enterprise Priority</span>
+                    <p class="ex-id">ER #101</p>
+                    <p class="ex-title">Multi-Tenant SAML SSO</p>
+                    <div class="score-breakdown">
+                        <div class="score-line">
+                            <span class="lbl">Creator — Account X (Enterprise, &gt;$1M ARR)</span>
+                            <span class="val">419.18</span>
+                        </div>
+                        <div class="score-line sub">
+                            <span class="lbl">150 × 1.50 (Yellow) × 1.35 (Strategic) × 1.20 (Key Contact) × 1.15 (90-day renewal)</span>
+                            <span class="val"></span>
+                        </div>
+                        <div class="score-line">
+                            <span class="lbl">2 supporting mid-market companies (unique domains)</span>
+                            <span class="val">+20.25</span>
+                        </div>
+                        <div class="score-line">
+                            <span class="lbl">12 internal echo votes from Account X</span>
+                            <span class="val">+1.20</span>
+                        </div>
+                    </div>
+                    <div class="score-total">
+                        <span class="lbl">Final ER Score</span>
+                        <span class="val" style="color:var(--green)">440.63</span>
+                    </div>
+                </div>
+                <div class="ex-card" style="border-color:#fed7aa">
+                    <span class="ex-tag" style="background:var(--amber)">⚠ Ballot Stuffing Deflated</span>
+                    <p class="ex-id">ER #102</p>
+                    <p class="ex-title">Custom Emoji Reactions</p>
+                    <div class="score-breakdown">
+                        <div class="score-line">
+                            <span class="lbl">Creator — Account Z (SMB, &lt;$50k ARR)</span>
+                            <span class="val">2.00</span>
+                        </div>
+                        <div class="score-line">
+                            <span class="lbl">15 supporting SMB companies (unique domains)</span>
+                            <span class="val">+7.50</span>
+                        </div>
+                        <div class="score-line">
+                            <span class="lbl" style="color:var(--red)">600 internal echo votes (ballot stuffing attempt)</span>
+                            <span class="val" style="color:var(--red)">+60.00</span>
+                        </div>
+                    </div>
+                    <div class="score-total">
+                        <span class="lbl">Final ER Score</span>
+                        <span class="val" style="color:var(--amber)">69.50</span>
+                    </div>
+                </div>
+            </div>
+            <div class="callout blue" style="margin-top:16px">
+                ⚡ Despite <strong>600 internal votes</strong> from a single SMB account, ER #102 scores <strong>6× lower</strong> than the enterprise SSO request. Business value wins — as intended.
+            </div>
+        </details>
+    </div>
+</section>
+
+<!-- ═══════════════ V2.0 ═══════════════ -->
+<section class="alt">
+    <div class="container">
+        <div class="ver-row">
+            <span class="v-pill purple">V2.0</span>
+            <span class="v-pill amber">🗓 January 2027</span>
+        </div>
+
+        <details class="ex-details" open="">
+            <summary class="ex-summary">
+                <span class="ex-summary-left">
+                    <h2 class="sec-title" style="margin-bottom:6px">V2.0 AI-Augmented Formula</h2>
+                    <p style="font-size:16px; color:var(--slate-500); margin:0">V2.0 layers two automated AI modules onto the V1.0 score — adding competitive intelligence and support cost analysis without any manual input.</p>
+                </span>
+                <span class="ex-chevron">▶</span>
+            </summary>
+
+            <!-- V2.0 Formula -->
+            <div class="formula-block" style="margin-top:28px">
+                <p class="formula-block-label">V2.0 Score Formula</p>
+                <div class="formula-row">
+                    <span class="f-result">V2.0 Score</span>
+                    <span class="f-eq">=</span>
+                    <span class="f-chip f-blue">V1.0 Base Score</span>
+                    <span class="f-op">×</span>
+                    <span class="f-chip f-purple">Competitor Multiplier  (AI)</span>
+                    <span class="f-op">×</span>
+                    <span class="f-chip f-red">Support Multiplier  (AI)</span>
+                </div>
+                <p class="formula-note">AI multipliers compound on top of the full V1.0 score. An ER that already scores high on business value, faces active competitive pressure, <em>and</em> drives high support costs will escalate significantly — surfacing the most defensively urgent requests.</p>
+            </div>
+
+            <!-- AI Modules -->
+            <div class="ai-grid">
+                <div class="ai-card">
+                    <div class="ai-icon">🤖</div>
+                    <h3>Competitor Threat AI</h3>
+                    <p>Text parser that matches ER descriptions against competitive loss matrices and churn notes in Salesforce to detect feature gaps that are actively costing deals.</p>
+                    <div class="ai-tier">
+                        <span class="t-name">🔴 High — Actively losing deals or churn to named competitors due to this gap</span>
+                        <span class="mult mult-hi">× 1.35</span>
+                    </div>
+                    <div class="ai-tier">
+                        <span class="t-name">🟡 Parity Gap — Industry table-stakes; competitors offer it</span>
+                        <span class="mult mult-mid">× 1.15</span>
+                    </div>
+                    <div class="ai-tier">
+                        <span class="t-name">⚪ None — Architecture-specific or no competitive signal</span>
+                        <span class="mult mult-lo">× 1.00</span>
+                    </div>
+                </div>
+                <div class="ai-card">
+                    <div class="ai-icon">🎫</div>
+                    <h3>Support Ticket Clusterer</h3>
+                    <p>Maps the ER workflow against Support tickets related to the ER to quantify the operational support cost of <em>not</em> building this feature.</p>
+                    <div class="ai-tier">
+                        <span class="t-name">🔴 High Impact — Workflow triggers &gt;20 tickets / month</span>
+                        <span class="mult mult-hi">× 1.30</span>
+                    </div>
+                    <div class="ai-tier">
+                        <span class="t-name">🟡 Medium Impact — 1-20 tickets / month</span>
+                        <span class="mult mult-mid">× 1.15</span>
+                    </div>
+                    <div class="ai-tier">
+                        <span class="t-name">⚪ Low / None —&nbsp;</span>
+                        <span class="mult mult-lo">× 1.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- V2.0 Examples (collapsible) -->
+            <details class="ex-details" style="margin-top:52px" open="">
+                <summary class="ex-summary">
+                    <span class="ex-summary-left">
+                        <p class="eyebrow purple" style="margin:0">📊 V2.0 · Example scenarios</p>
+                        <h3 style="font-size:26px; font-weight:800; color:var(--slate-900); margin:6px 0 4px; line-height:1.2">Same V1.0 baseline. AI context reveals which is truly urgent.</h3>
+                        <p style="color:var(--slate-500); font-size:15px; margin:0">Both ERs start at 100.00 from identical account demographics.</p>
+                    </span>
+                    <span class="ex-chevron">▶</span>
+                </summary>
+                <div class="ex-grid" style="margin-top:28px">
+                    <div class="ex-card" style="border-color:#ddd6fe">
+                        <span class="ex-tag" style="background:var(--purple)">✓ AI-Boosted Priority</span>
+                        <p class="ex-id">ER #201</p>
+                        <p class="ex-title">Automated Invoice Reconciliation</p>
+                        <div class="score-breakdown">
+                            <div class="score-line">
+                                <span class="lbl">V1.0 Baseline Score</span>
+                                <span class="val">100.00</span>
+                            </div>
+                            <div class="score-line">
+                                <span class="lbl">Competitor AI — High Threat (Competitor Y wins on this)</span>
+                                <span class="val" style="color:var(--purple)">× 1.35</span>
+                            </div>
+                            <div class="score-line">
+                                <span class="lbl">Support AI — High Impact (140 tickets / month)</span>
+                                <span class="val" style="color:var(--purple)">× 1.30</span>
+                            </div>
+                        </div>
+                        <div class="score-total">
+                            <span class="lbl">Final V2.0 Score</span>
+                            <span class="val" style="color:var(--purple)">175.50</span>
+                        </div>
+                    </div>
+                    <div class="ex-card">
+                        <span class="ex-tag" style="background:var(--slate-400)">No AI Signal</span>
+                        <p class="ex-id">ER #202</p>
+                        <p class="ex-title">Legacy IE11 Export Formats</p>
+                        <div class="score-breakdown">
+                            <div class="score-line">
+                                <span class="lbl">V1.0 Baseline Score</span>
+                                <span class="val">100.00</span>
+                            </div>
+                            <div class="score-line">
+                                <span class="lbl">Competitor AI — None (competitors deprecated IE11 too)</span>
+                                <span class="val" style="color:var(--slate-400)">× 1.00</span>
+                            </div>
+                            <div class="score-line">
+                                <span class="lbl">Support AI — Low (2 tickets in 6 months)</span>
+                                <span class="val" style="color:var(--slate-400)">× 1.00</span>
+                            </div>
+                        </div>
+                        <div class="score-total">
+                            <span class="lbl">Final V2.0 Score</span>
+                            <span class="val" style="color:var(--slate-400)">100.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout purple" style="margin-top:16px">
+                    ⚡ Same account demographics, but AI context reveals a <strong>75% score gap</strong>. Invoice reconciliation is a live competitive threat driving active support costs — IE11 formats are neither.
+                </div>
+            </details>
+
+        </details>
+    </div>
+</section>
+
+<!-- ═══════════════ ROADMAP ═══════════════ -->
+<section>
+    <div class="container">
+        <p class="eyebrow slate">🗺 Roadmap</p>
+        <h2 class="sec-title">Two phases. Clear milestones.</h2>
+        <p class="sec-desc" style="margin-bottom:52px">V1.0 delivers immediate, automatable value with no AI infrastructure dependency. V2.0 builds on it in 2027.</p>
+        <div class="timeline">
+            <div class="t-item">
+                <div class="t-dot blue"></div>
+                <p class="t-period">Now → January 2027</p>
+                <h3>V1.0 — Data-Driven Formula</h3>
+                <p>Pure deterministic scoring from Salesforce and internal databases. Fully automatable on day one. No AI dependency required.</p>
+                <div class="t-tags">
+                    <span class="t-tag blue">📊 Salesforce Integration</span>
+                    <span class="t-tag blue">💰 Exponential ARR Scoring</span>
+                    <span class="t-tag blue">🌐 Domain-Based Voting</span>
+                    <span class="t-tag blue">✖️ Multiplicative Multipliers</span>
+                </div>
+            </div>
+            <div class="t-item">
+                <div class="t-dot purple"></div>
+                <p class="t-period">January 2027</p>
+                <h3>V2.0 — AI-Augmented Formula</h3>
+                <p>Automated AI text analysis layered on top of V1.0. Competitive intelligence and support-cost signals applied without manual work.</p>
+                <div class="t-tags">
+                    <span class="t-tag purple">🤖 Competitor Threat AI Parser</span>
+                    <span class="t-tag purple">🎫 Support Ticket Clusterer</span>
+                    <span class="t-tag purple">📈 Compound AI Multipliers</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    ER Prioritization Framework &nbsp;·&nbsp; Executive Brief &nbsp;·&nbsp; V1.0 Active Now &nbsp;·&nbsp; V2.0 Targeted January 2027
+</footer>
+
+<!-- ── EDIT TOOLBAR ── -->
+<div id="edit-fab" title="Edit page" onclick="toggleEdit()" style="position: fixed; bottom: 28px; right: 28px; z-index: 9999; width: 52px; height: 52px; border-radius: 50%; background: var(--slate-800); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 20px; border: 2px solid var(--slate-600); transition: 0.2s; transform: scale(1);" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'">✏️</div>
+
+<div id="edit-bar" style="display: none; position: fixed; bottom: 0px; left: 0px; right: 0px; z-index: 9998; background: var(--slate-900); border-top: 1px solid var(--slate-700); padding: 12px 24px; align-items: center; gap: 14px; flex-wrap: wrap;">
+    <span style="font-size:13px; font-weight:700; color:#60a5fa; letter-spacing:.5px;">✏️ EDIT MODE</span>
+    <span id="edit-bar-hint" style="font-size:12px; color:var(--slate-400); flex:1;">Click any text to edit. When saving, the folder path is auto-copied — paste it in the dialog's address bar.</span>
+    <button onclick="saveToFile()" style="
+        background:var(--blue); color:white; border:none; border-radius:8px;
+        padding:8px 20px; font-size:13px; font-weight:600; cursor:pointer;">
+        💾 Save to file
+    </button>
+    <button onclick="toggleEdit()" style="
+        background:transparent; color:var(--slate-400); border:1px solid var(--slate-600);
+        border-radius:8px; padding:8px 16px; font-size:13px; cursor:pointer;">
+        ✕ Exit without saving
+    </button>
+</div>
+
+<style>
+    [contenteditable="true"] { outline:2px dashed #60a5fa !important; outline-offset:3px; border-radius:4px; }
+    [contenteditable="true"]:focus { outline:2px solid #2563eb !important; background:rgba(37,99,235,.05); }
+    body.edit-mode #edit-fab { background:var(--blue); border-color:#60a5fa; }
+</style>
+
+<script>
+    const EDITABLE_SELECTORS = 'h1, h2, h3, h4, h5, p, li, td, th, span:not(.badge-dot):not(.tier-dot), footer';
+    let editing = false;
+    let fileHandle = null;
+
+    function getEditables() {
+        return Array.from(document.querySelectorAll(EDITABLE_SELECTORS))
+            .filter(el => !el.closest('#edit-bar') && !el.closest('#edit-fab') && el.textContent.trim());
+    }
+
+    function toggleEdit() {
+        editing = !editing;
+        const bar = document.getElementById('edit-bar');
+        bar.style.display = editing ? 'flex' : 'none';
+        document.body.classList.toggle('edit-mode', editing);
+        document.body.style.paddingBottom = editing ? '64px' : '';
+        getEditables().forEach(el => {
+            el.contentEditable = editing ? 'true' : 'false';
+        });
+        if (!editing) fileHandle = null;
+    }
+
+    function getFolderPath() {
+        const url = decodeURIComponent(window.location.href);
+        const path = url.replace(/^file:\/\/\//, '').replace(/\/[^/]+$/, '');
+        return path.replace(/\//g, '\\');
+    }
+
+    async function saveToFile() {
+        try {
+            // Copy folder path to clipboard before opening dialog
+            await navigator.clipboard.writeText(getFolderPath()).catch(() => {});
+            document.getElementById('edit-bar-hint').innerHTML =
+                '📋 <strong style="color:#fbbf24">Folder path copied!</strong> In the Save dialog: click the address bar → <kbd style="background:#334155;padding:1px 6px;border-radius:4px;font-family:monospace">Ctrl+V</kbd> → Enter → select index.html';
+            await new Promise(r => setTimeout(r, 800));
+
+            if (!fileHandle) {
+                fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'index.html',
+                    types: [{ description: 'HTML file', accept: { 'text/html': ['.html'] } }]
+                });
+            }
+
+            // Exit edit mode and strip contenteditable before saving
+            getEditables().forEach(el => el.removeAttribute('contenteditable'));
+            document.body.classList.remove('edit-mode');
+            document.body.style.paddingBottom = '';
+            document.getElementById('edit-bar').style.display = 'none';
+            document.getElementById('edit-fab').style.background = 'var(--slate-800)';
+            editing = false;
+
+            const clone = document.documentElement.cloneNode(true);
+            clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+            // Reset edit-bar display to none in clone
+            const cloneBar = clone.querySelector('#edit-bar');
+            if (cloneBar) cloneBar.style.display = 'none';
+            // Reset hint text in clone
+            const cloneHint = clone.querySelector('#edit-bar-hint');
+            if (cloneHint) cloneHint.innerHTML = "Click any text to edit. When saving, the folder path is auto-copied — paste it in the dialog's address bar.";
+
+            const writable = await fileHandle.createWritable();
+            await writable.write('<!DOCTYPE html>\n' + clone.outerHTML);
+            await writable.close();
+
+            document.getElementById('edit-bar-hint').innerHTML = "Click any text to edit. When saving, the folder path is auto-copied — paste it in the dialog's address bar.";
+            showToast('Saved ✓');
+        } catch (e) {
+            if (e.name !== 'AbortError') showToast('Save failed: ' + e.message, true);
+        }
+    }
+
+    function showToast(msg, error) {
+        const t = document.createElement('div');
+        t.textContent = msg;
+        Object.assign(t.style, {
+            position:'fixed', bottom:'80px', right:'28px', zIndex:'99999',
+            background: error ? '#dc2626' : '#16a34a',
+            color:'white', padding:'10px 20px',
+            borderRadius:'10px', fontSize:'13px', fontWeight:'600',
+            boxShadow:'0 4px 16px rgba(0,0,0,.25)', transition:'opacity .4s'
+        });
+        document.body.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
+    }
+</script>
+
+
+
+</body></html>
